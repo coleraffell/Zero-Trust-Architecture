@@ -3,28 +3,9 @@ import sqlite3
 import math
 import sys
 
-database = 'C:\\Users\\cole_\\OneDrive\\Desktop\\Uni of Southampton\\Semester 6\\Security of Cyber Physical Systems\\CW2 - B\\DataCollect.db'
-IoT1 = 'C:\\Users\\cole_\\OneDrive\\Desktop\\Uni of Southampton\\Semester 6\\Security of Cyber Physical Systems\\CW2 - B\\COMP321720212022CW2B\\IoT1.exe'
-IoT1Anom = 'C:\\Users\\cole_\\OneDrive\\Desktop\\Uni of Southampton\\Semester 6\\Security of Cyber Physical Systems\\CW2 - B\\COMP321720212022CW2B\\IoT1_anomaly.exe'
-IoT2 = 'C:\\Users\\cole_\\OneDrive\\Desktop\\Uni of Southampton\\Semester 6\\Security of Cyber Physical Systems\\CW2 - B\\COMP321720212022CW2B\\IoT2.exe'
-IoT2Anom = 'C:\\Users\\cole_\\OneDrive\\Desktop\\Uni of Southampton\\Semester 6\\Security of Cyber Physical Systems\\CW2 - B\\COMP321720212022CW2B\\IoT2_anomaly.exe'
-IoT3 = 'C:\\Users\\cole_\\OneDrive\\Desktop\\Uni of Southampton\\Semester 6\\Security of Cyber Physical Systems\\CW2 - B\\COMP321720212022CW2B\\IoT3.exe'
-IoT3Anom = 'C:\\Users\\cole_\\OneDrive\\Desktop\\Uni of Southampton\\Semester 6\\Security of Cyber Physical Systems\\CW2 - B\\COMP321720212022CW2B\\IoT3_anomaly.exe'
-IoT4 = 'C:\\Users\\cole_\\OneDrive\\Desktop\\Uni of Southampton\\Semester 6\\Security of Cyber Physical Systems\\CW2 - B\\COMP321720212022CW2B\\IoT4.exe'
-IoT4Anom = 'C:\\Users\\cole_\\OneDrive\\Desktop\\Uni of Southampton\\Semester 6\\Security of Cyber Physical Systems\\CW2 - B\\COMP321720212022CW2B\\IoT4_anomaly.exe'
-IoT5 = 'C:\\Users\\cole_\\OneDrive\\Desktop\\Uni of Southampton\\Semester 6\\Security of Cyber Physical Systems\\CW2 - B\\COMP321720212022CW2B\\IoT5.exe'
-IoT5Anom = 'C:\\Users\\cole_\\OneDrive\\Desktop\\Uni of Southampton\\Semester 6\\Security of Cyber Physical Systems\\CW2 - B\\COMP321720212022CW2B\\IoT5_anomaly.exe'
-IoT6 = 'C:\\Users\\cole_\\OneDrive\\Desktop\\Uni of Southampton\\Semester 6\\Security of Cyber Physical Systems\\CW2 - B\\COMP321720212022CW2B\\IoT6.exe'
-IoT6Anom = 'C:\\Users\\cole_\\OneDrive\\Desktop\\Uni of Southampton\\Semester 6\\Security of Cyber Physical Systems\\CW2 - B\\COMP321720212022CW2B\\IoT6_anomaly.exe'
-IoT7 = 'C:\\Users\\cole_\\OneDrive\\Desktop\\Uni of Southampton\\Semester 6\\Security of Cyber Physical Systems\\CW2 - B\\COMP321720212022CW2B\\IoT7.exe'
-IoT7Anom = 'C:\\Users\\cole_\\OneDrive\\Desktop\\Uni of Southampton\\Semester 6\\Security of Cyber Physical Systems\\CW2 - B\\COMP321720212022CW2B\\IoT7_anomaly.exe'
-IoT8 = 'C:\\Users\\cole_\\OneDrive\\Desktop\\Uni of Southampton\\Semester 6\\Security of Cyber Physical Systems\\CW2 - B\\COMP321720212022CW2B\\IoT8.exe'
-IoT8Anom = 'C:\\Users\\cole_\\OneDrive\\Desktop\\Uni of Southampton\\Semester 6\\Security of Cyber Physical Systems\\CW2 - B\\COMP321720212022CW2B\\IoT8_anomaly.exe'
-IoT9 = 'C:\\Users\\cole_\\OneDrive\\Desktop\\Uni of Southampton\\Semester 6\\Security of Cyber Physical Systems\\CW2 - B\\COMP321720212022CW2B\\IoT9.exe'
-IoT9Anom = 'C:\\Users\\cole_\\OneDrive\\Desktop\\Uni of Southampton\\Semester 6\\Security of Cyber Physical Systems\\CW2 - B\\COMP321720212022CW2B\\IoT9_anomaly.exe'
-IoT10 = 'C:\\Users\\cole_\\OneDrive\\Desktop\\Uni of Southampton\\Semester 6\\Security of Cyber Physical Systems\\CW2 - B\\COMP321720212022CW2B\\IoT10.exe'
-IoT10Anom = 'C:\\Users\\cole_\\OneDrive\\Desktop\\Uni of Southampton\\Semester 6\\Security of Cyber Physical Systems\\CW2 - B\\COMP321720212022CW2B\\IoT10_anomaly.exe'
+database = 'DataCollect.db'
 
+# This method takes the command line file and runs it, sending the output to getOutput
 
 def getIoT(inputFile, IoT):
 
@@ -34,6 +15,8 @@ def getIoT(inputFile, IoT):
     getOutput(IoT, output)
     # print "Command exit status/return code : ", p_status
 
+    
+# Method is given device output and uses booleans to iterate through string array to find device inputs
 
 def getIoTInputs(splitOutput):
 
@@ -55,6 +38,8 @@ def getIoTInputs(splitOutput):
         a += 1
     return inputArray
 
+
+# Method is given device output and uses booleans to iterate through string array to find device calls
 
 def getIoTDeviceArray(splitOutput):
 
@@ -78,6 +63,8 @@ def getIoTDeviceArray(splitOutput):
     return callArray
 
 
+# Method is given device output and uses booleans to iterate through string array to find device outputs
+
 def getIoTOutputs(splitOutput):
 
     # ***** Record output *****
@@ -92,8 +79,11 @@ def getIoTOutputs(splitOutput):
     return outputArray
 
 
+# Method establishes which IoT devices have been called from current IoT device
+
 def getDeviceCalls(callArray):
 
+    # i[2] is always IoT device number
     deviceCalls = []
     for i in callArray:
         deviceCalls.append(i[2])
@@ -101,14 +91,19 @@ def getDeviceCalls(callArray):
     return deviceCalls
 
 
+# Method establishes parameters used for IoT device calls
+
 def getDeviceParameters(callArray):
 
+    # i[5] is always parameter
     deviceCalls = []
     for i in callArray:
         deviceCalls.append(i[5])
 
     return deviceCalls
 
+
+# Method iterates through each element of each int list and finds the biggest difference between any two numbers
 
 def getInputVsParameter(inputList, paramList):
 
@@ -126,6 +121,8 @@ def getInputVsParameter(inputList, paramList):
     return listResult
 
 
+# Method iterates through each element of each int list and finds the biggest difference between any two numbers
+
 def getParameterVsOutput(paramList, output):
 
     listResult = []
@@ -141,50 +138,63 @@ def getParameterVsOutput(paramList, output):
 
     return listResult
 
+# The main method. Ensuring there are no anomalies bit by bit
 
 def getSpecifics(IoTDevice, inputArray, outputArray, callArray):
 
     bools = []
 
+    # Ensure the number of inputs isn't irregular
     numInputs = len(inputArray)
     numInputsSafe = compareNumInputs(IoTDevice, numInputs)
     bools.append(numInputsSafe)
 
+    # Ensure number of calls isn't irregular
     numCalls = len(callArray)
     numCallsSafe = compareNumCalls(IoTDevice, numCalls)
     bools.append(numCallsSafe)
 
+    # Ensure highest input in current IoT device isn't irregular
     highestInput = max(inputArray)
     inputSizeSafe = compareHighestInput(IoTDevice, highestInput)
     bools.append(inputSizeSafe)
 
+    # Ensure output size isn't irregular
     output = outputArray[1]
     outputSizeIsSafe = compareOutputs(IoTDevice, output)
     bools.append(outputSizeIsSafe)
 
+    # Ensure IoT device calls have been made before. I.e., device 1 doesn't call device 8
     deviceCalls = getDeviceCalls(callArray)
     deviceCallsAreSafe = compareDeviceCalls(IoTDevice, deviceCalls)
     bools.append(deviceCallsAreSafe)
 
+    # Ensure device parameters aren't irregular
     deviceParametersSafe = compareDeviceParameters(IoTDevice, deviceCalls, callArray)
     bools.append(deviceParametersSafe)
 
+    # Ensure not too much of a difference between input & parameter
     input_vs_parameter = max(getInputVsParameter(inputArray, getDeviceParameters(callArray)))
     isInputVsParameterSafe = compareInputsParameters(IoTDevice, input_vs_parameter)
     bools.append(isInputVsParameterSafe)
 
+    # Ensure not too much of a difference between parameter & output
     parameter_vs_output = max(getParameterVsOutput(getDeviceParameters(callArray), output))
     isParameterVsOutputSafe = compareParametersOutputs(IoTDevice, parameter_vs_output)
     bools.append(isParameterVsOutputSafe)
 
+    # Ensure the inputs are within 2 standard deviations of data set
     inputStandardDeviationSafe = inputStandardDeviation(IoTDevice, inputArray)
     bools.append(inputStandardDeviationSafe)
 
+    # Check if any of the above checks returned False
     if bools.__contains__(False):
         print "Anomaly!"
     else:
         print "Safe!"
 
+
+# Query device database to check if device has received that many inputs before
 
 def compareNumInputs(IoTDevice, numInputs):
 
@@ -198,6 +208,8 @@ def compareNumInputs(IoTDevice, numInputs):
         return False
 
 
+# Query device database to check if device has sent that many calls before
+
 def compareNumCalls(IoTDevice, numCalls):
 
     c.execute("SELECT * FROM IoT{} WHERE Num_Calls={}".format(IoTDevice, numCalls))
@@ -209,6 +221,8 @@ def compareNumCalls(IoTDevice, numCalls):
     else:
         return False
 
+
+# Query device database to compare the highest input with database highest recorded input
 
 def compareHighestInput(IoTDevice, highestInput):
 
@@ -223,6 +237,8 @@ def compareHighestInput(IoTDevice, highestInput):
         return False
 
 
+# Query device database to compare the highest output with database highest recorded output
+
 def compareOutputs(IoTDevice, output):
 
     c.execute("SELECT Output FROM IoT{} WHERE Output=(SELECT MAX(Output) FROM IoT{})".format(IoTDevice, IoTDevice))
@@ -235,6 +251,8 @@ def compareOutputs(IoTDevice, output):
     else:
         return False
 
+
+# Query database to check if device calls have been made before
 
 def compareDeviceCalls(IoTDevice, deviceCalls):
 
@@ -253,6 +271,8 @@ def compareDeviceCalls(IoTDevice, deviceCalls):
     else:
         return True
 
+
+# Query device database to check if device call parameters have previously been this high
 
 def compareDeviceParameters(IoTDevice, deviceCalls, callArray):
 
@@ -275,6 +295,7 @@ def compareDeviceParameters(IoTDevice, deviceCalls, callArray):
     else:
         return True
 
+# Query database to ensure the difference between input and device parameters isn't too high
 
 def compareInputsParameters(IoTDevice, inputsVsParameters):
 
@@ -289,6 +310,8 @@ def compareInputsParameters(IoTDevice, inputsVsParameters):
         return False
 
 
+# Query database to ensure the difference between call parameters and the output isn't too high
+
 def compareParametersOutputs(IoTDevice, parametersVsOutputs):
 
     c.execute("SELECT Parameter_vs_Output FROM IoT{}_Calls WHERE Parameter_vs_Output=(SELECT MAX(Parameter_vs_Output) FROM IoT{}_Calls)".format(IoTDevice, IoTDevice))
@@ -301,6 +324,8 @@ def compareParametersOutputs(IoTDevice, parametersVsOutputs):
     else:
         return False
 
+
+# Method to calculate if the current inputs are outside of 2 standard deviations
 
 def inputStandardDeviation(IoTDevice, inputs):
 
@@ -356,6 +381,8 @@ def getIoTDeviceParameter(IoTDevice, callArray):
             return int(i[5])
 
 
+# method is given device output, makes use of get methods to pull specific parts
+
 def getOutput(IoT, output):
 
     splitOutput = output.split()
@@ -364,6 +391,8 @@ def getOutput(IoT, output):
     outputArray = getIoTOutputs(splitOutput)
     getSpecifics(IoT, inputArray, outputArray, callArray)
 
+
+# Testing method to ensure database works
 
 def printDataBase(IoT_Device):
 
@@ -379,8 +408,8 @@ conn = sqlite3.connect(database)
 c = conn.cursor()
 
 # Sys.argv[1] wouldn't work for me. the commented inputFile does though if argv doesn't
-inputFile = raw_input('Enter IoT file: ')
-# inputFile = sys.argv[1]
+# inputFile = raw_input('Enter IoT file: ')
+inputFile = sys.argv[1]
 
 if inputFile.__contains__('1'):
     getIoT(inputFile, 1)
@@ -402,4 +431,6 @@ if inputFile.__contains__('9'):
     getIoT(inputFile, 9)
 if inputFile.__contains__('10'):
     getIoT(inputFile, 10)
+
+
 
