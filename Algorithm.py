@@ -3,10 +3,29 @@ import sqlite3
 
 database = 'C:\\Users\\cole_\\OneDrive\\Desktop\\Uni of Southampton\\Semester 6\\Security of Cyber Physical Systems\\CW2 - B\\DataCollect.db'
 IoT1 = 'C:\\Users\\cole_\\OneDrive\\Desktop\\Uni of Southampton\\Semester 6\\Security of Cyber Physical Systems\\CW2 - B\\COMP321720212022CW2B\\IoT1.exe'
-IoT1_anom = 'C:\\Users\\cole_\\OneDrive\\Desktop\\Uni of Southampton\\Semester 6\\Security of Cyber Physical Systems\\CW2 - B\\COMP321720212022CW2B\\IoT1_anomaly.exe'
+IoT1Anom = 'C:\\Users\\cole_\\OneDrive\\Desktop\\Uni of Southampton\\Semester 6\\Security of Cyber Physical Systems\\CW2 - B\\COMP321720212022CW2B\\IoT1_anomaly.exe'
+IoT2 = 'C:\\Users\\cole_\\OneDrive\\Desktop\\Uni of Southampton\\Semester 6\\Security of Cyber Physical Systems\\CW2 - B\\COMP321720212022CW2B\\IoT2.exe'
+IoT2Anom = 'C:\\Users\\cole_\\OneDrive\\Desktop\\Uni of Southampton\\Semester 6\\Security of Cyber Physical Systems\\CW2 - B\\COMP321720212022CW2B\\IoT2_anomaly.exe'
+IoT3 = 'C:\\Users\\cole_\\OneDrive\\Desktop\\Uni of Southampton\\Semester 6\\Security of Cyber Physical Systems\\CW2 - B\\COMP321720212022CW2B\\IoT3.exe'
+IoT3Anom = 'C:\\Users\\cole_\\OneDrive\\Desktop\\Uni of Southampton\\Semester 6\\Security of Cyber Physical Systems\\CW2 - B\\COMP321720212022CW2B\\IoT3_anomaly.exe'
+IoT4 = 'C:\\Users\\cole_\\OneDrive\\Desktop\\Uni of Southampton\\Semester 6\\Security of Cyber Physical Systems\\CW2 - B\\COMP321720212022CW2B\\IoT4.exe'
+IoT4Anom = 'C:\\Users\\cole_\\OneDrive\\Desktop\\Uni of Southampton\\Semester 6\\Security of Cyber Physical Systems\\CW2 - B\\COMP321720212022CW2B\\IoT4_anomaly.exe'
+IoT5 = 'C:\\Users\\cole_\\OneDrive\\Desktop\\Uni of Southampton\\Semester 6\\Security of Cyber Physical Systems\\CW2 - B\\COMP321720212022CW2B\\IoT5.exe'
+IoT5Anom = 'C:\\Users\\cole_\\OneDrive\\Desktop\\Uni of Southampton\\Semester 6\\Security of Cyber Physical Systems\\CW2 - B\\COMP321720212022CW2B\\IoT5_anomaly.exe'
+IoT6 = 'C:\\Users\\cole_\\OneDrive\\Desktop\\Uni of Southampton\\Semester 6\\Security of Cyber Physical Systems\\CW2 - B\\COMP321720212022CW2B\\IoT6.exe'
+IoT6Anom = 'C:\\Users\\cole_\\OneDrive\\Desktop\\Uni of Southampton\\Semester 6\\Security of Cyber Physical Systems\\CW2 - B\\COMP321720212022CW2B\\IoT6_anomaly.exe'
+IoT7 = 'C:\\Users\\cole_\\OneDrive\\Desktop\\Uni of Southampton\\Semester 6\\Security of Cyber Physical Systems\\CW2 - B\\COMP321720212022CW2B\\IoT7.exe'
+IoT7Anom = 'C:\\Users\\cole_\\OneDrive\\Desktop\\Uni of Southampton\\Semester 6\\Security of Cyber Physical Systems\\CW2 - B\\COMP321720212022CW2B\\IoT7_anomaly.exe'
+IoT8 = 'C:\\Users\\cole_\\OneDrive\\Desktop\\Uni of Southampton\\Semester 6\\Security of Cyber Physical Systems\\CW2 - B\\COMP321720212022CW2B\\IoT8.exe'
+IoT8Anom = 'C:\\Users\\cole_\\OneDrive\\Desktop\\Uni of Southampton\\Semester 6\\Security of Cyber Physical Systems\\CW2 - B\\COMP321720212022CW2B\\IoT8_anomaly.exe'
+IoT9 = 'C:\\Users\\cole_\\OneDrive\\Desktop\\Uni of Southampton\\Semester 6\\Security of Cyber Physical Systems\\CW2 - B\\COMP321720212022CW2B\\IoT9.exe'
+IoT9Anom = 'C:\\Users\\cole_\\OneDrive\\Desktop\\Uni of Southampton\\Semester 6\\Security of Cyber Physical Systems\\CW2 - B\\COMP321720212022CW2B\\IoT9_anomaly.exe'
+IoT10 = 'C:\\Users\\cole_\\OneDrive\\Desktop\\Uni of Southampton\\Semester 6\\Security of Cyber Physical Systems\\CW2 - B\\COMP321720212022CW2B\\IoT10.exe'
+IoT10Anom = 'C:\\Users\\cole_\\OneDrive\\Desktop\\Uni of Southampton\\Semester 6\\Security of Cyber Physical Systems\\CW2 - B\\COMP321720212022CW2B\\IoT10_anomaly.exe'
 
 
 def getIoT(inputFile, IoT):
+    print "IOT: " + str(IoT)
     p = subprocess.Popen(inputFile, stdout=subprocess.PIPE, shell=True)
     (output, err) = p.communicate()
     p_status = p.wait()
@@ -127,58 +146,57 @@ def getSpecifics(IoTDevice, inputArray, outputArray, callArray):
 
     numInputs = len(inputArray)
     numInputsSafe = compareNumInputs(IoTDevice, numInputs)
-    print numInputsSafe
+    if not numInputsSafe:
+        print "Number of inputs: anomaly"
     bools.append(numInputsSafe)
-    print ''
 
     inputs = str(inputArray)
-    print "Inputs: " + inputs
-    print ''
 
     numCalls = len(callArray)
     numCallsSafe = compareNumCalls(IoTDevice, numCalls)
-    print numCallsSafe
+    if not numCallsSafe:
+        print "Number of calls: anomaly"
     bools.append(numCallsSafe)
-    print ''
 
     highestInput = max(inputArray)
     inputSizeSafe = compareHighestInput(IoTDevice, highestInput)
-    print inputSizeSafe
+    if not inputSizeSafe:
+        print "Input size: anomaly"
     bools.append(inputSizeSafe)
-    print ''
 
     output = outputArray[1]
     outputSizeIsSafe = compareOutputs(IoTDevice, output)
-    print outputSizeIsSafe
+    if not outputSizeIsSafe:
+        print "Irregular output size: anomaly"
     bools.append(outputSizeIsSafe)
-    print ''
 
     deviceCalls = getDeviceCalls(callArray)
     deviceCallsAreSafe = compareDeviceCalls(IoTDevice, deviceCalls)
-    print deviceCallsAreSafe
+    if not deviceCallsAreSafe:
+        print "Device calls: anomaly"
     bools.append(deviceCallsAreSafe)
-    print ''
 
     deviceParametersSafe = compareDeviceParameters(IoTDevice, deviceCalls, callArray)
-    print deviceParametersSafe
+    if not deviceParametersSafe:
+        print "Device parameters: anomaly"
     bools.append(deviceParametersSafe)
-    print ''
 
     input_vs_parameter = max(getInputVsParameter(inputArray, getDeviceParameters(callArray)))
     isInputVsParameterSafe = compareInputsParameters(IoTDevice, input_vs_parameter)
-    print isInputVsParameterSafe
+    if not isInputVsParameterSafe:
+        print "Input vs parameter: anomaly"
     bools.append(isInputVsParameterSafe)
-    print ''
 
     parameter_vs_output = max(getParameterVsOutput(getDeviceParameters(callArray), output))
     isParameterVsOutputSafe = compareParametersOutputs(IoTDevice, parameter_vs_output)
-    print isParameterVsOutputSafe
+    if not isParameterVsOutputSafe:
+        print "Parameter vs output: anomaly"
     bools.append(isParameterVsOutputSafe)
-    print ''
 
     if bools.__contains__(False):
         print "Anomaly dataset!"
     else:
+        print ""
         print "Safe!"
 
     print ""
@@ -329,6 +347,7 @@ def getIoTDeviceParameter(IoTDevice, callArray):
 
 def getOutput(IoT, output):
 
+    print ""
     print "IoT device " + str(IoT)
     print "Command output: "
     print output
@@ -359,11 +378,51 @@ while 1:
 
     print "1: run IoT1"
     print "2: run IoT1 anomaly"
-    print "3: print IoT1 tables"
+    print "3: run IoT2"
+    print "4: run IoT2 anomaly"
+    print "5: run IoT3"
+    print "6: run IoT3 anomaly"
+    print ""
+
     answer = raw_input('Enter IoT: ')
     if answer == '1':
         getIoT(IoT1, 1)
     if answer == '2':
-        getIoT(IoT1_anom, 1)
+        getIoT(IoT1Anom, 1)
     if answer == '3':
-        printDataBase(1)
+        getIoT(IoT2, 2)
+    if answer == '4':
+        getIoT(IoT2Anom, 2)
+    if answer == '5':
+        getIoT(IoT3, 3)
+    if answer == '6':
+        getIoT(IoT3Anom, 3)
+    if answer == '7':
+        getIoT(IoT4, 4)
+    if answer == '8':
+        getIoT(IoT4Anom, 4)
+    if answer == '9':
+        getIoT(IoT5, 5)
+    if answer == '10':
+        getIoT(IoT5Anom, 5)
+    if answer == '11':
+        getIoT(IoT6, 6)
+    if answer == '12':
+        getIoT(IoT6Anom, 6)
+    if answer == '13':
+        getIoT(IoT7, 7)
+    if answer == '14':
+        getIoT(IoT7Anom, 7)
+    if answer == '15':
+        getIoT(IoT8, 8)
+    if answer == '16':
+        getIoT(IoT8Anom, 8)
+    if answer == '17':
+        getIoT(IoT9, 9)
+    if answer == '18':
+        getIoT(IoT9Anom, 9)
+    if answer == '19':
+        getIoT(IoT10, 10)
+    if answer == '20':
+        getIoT(IoT10Anom, 10)
+
