@@ -1,5 +1,6 @@
 import subprocess
 import sqlite3
+import math
 
 database = 'C:\\Users\\cole_\\OneDrive\\Desktop\\Uni of Southampton\\Semester 6\\Security of Cyber Physical Systems\\CW2 - B\\DataCollect.db'
 IoT1 = 'C:\\Users\\cole_\\OneDrive\\Desktop\\Uni of Southampton\\Semester 6\\Security of Cyber Physical Systems\\CW2 - B\\COMP321720212022CW2B\\IoT1.exe'
@@ -150,8 +151,6 @@ def getSpecifics(IoTDevice, inputArray, outputArray, callArray):
         print "Number of inputs: anomaly"
     bools.append(numInputsSafe)
 
-    inputs = str(inputArray)
-
     numCalls = len(callArray)
     numCallsSafe = compareNumCalls(IoTDevice, numCalls)
     if not numCallsSafe:
@@ -192,6 +191,11 @@ def getSpecifics(IoTDevice, inputArray, outputArray, callArray):
     if not isParameterVsOutputSafe:
         print "Parameter vs output: anomaly"
     bools.append(isParameterVsOutputSafe)
+
+    inputStandardDeviationSafe = inputStandardDeviation(IoTDevice, inputArray)
+    if not inputStandardDeviationSafe:
+        print "Input more than 1.5x standard deviation"
+    bools.append(inputStandardDeviationSafe)
 
     if bools.__contains__(False):
         print "Anomaly dataset!"
@@ -336,6 +340,57 @@ def compareParametersOutputs(IoTDevice, parametersVsOutputs):
         return True
     else:
         return False
+
+
+def inputStandardDeviation(IoTDevice, inputs):
+
+    print ""
+    print "Input Standard deviation test! "
+    print inputs
+
+    maxValuesArray = []
+    sumMaxValues = 0
+
+    c.execute("SELECT Highest_Input FROM IoT{}".format(IoTDevice))
+    results = c.fetchall()
+
+    for i in results:
+        tup = i
+        value = tup[0]
+        sumMaxValues += value
+        maxValuesArray.append(value)
+
+    mean = sumMaxValues/len(maxValuesArray)
+    iSubMeanSquaredArray = []
+
+    for i in results:
+        tup = i
+        value = tup[0]
+        iSubtractMean = value - mean
+        iSubMeanSquared = iSubtractMean*iSubtractMean
+        iSubMeanSquaredArray.append(iSubMeanSquared)
+
+    iSubMeanSquaredTotal = 0
+    for i in iSubMeanSquaredArray:
+        iSubMeanSquaredTotal += i
+
+    standardDeviation = math.sqrt(iSubMeanSquaredTotal / len(iSubMeanSquaredArray))
+    isSafe = []
+    for i in inputs:
+        if int(i) < mean:
+            diff = int(mean) - int(i)
+        else:
+            diff = int(i) - int(mean)
+        diffFromStandardDeviation = diff-standardDeviation
+        if diffFromStandardDeviation < 0:
+            diffFromStandardDeviation *= -1
+        if diffFromStandardDeviation > 1.5*standardDeviation:
+            isSafe.append(False)
+
+    if isSafe.__contains__(False):
+        return False
+    else:
+        return True
 
 
 def getIoTDeviceParameter(IoTDevice, callArray):
