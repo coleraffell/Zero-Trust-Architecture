@@ -150,64 +150,51 @@ def getSpecifics(IoTDevice, inputArray, outputArray, callArray):
     # Ensure the number of inputs isn't irregular
     numInputs = len(inputArray)
     numInputsSafe = compareNumInputs(IoTDevice, numInputs)
-    print numInputsSafe
     bools.append(numInputsSafe)
 
     # Ensure number of calls isn't irregular
     numCalls = len(callArray)
     numCallsSafe = compareNumCalls(IoTDevice, numCalls)
-    print numCallsSafe
     bools.append(numCallsSafe)
 
     # Ensure highest input in current IoT device isn't irregular
     highestInput = max(inputArray)
     inputSizeSafe = compareHighestInput(IoTDevice, highestInput)
-    print inputSizeSafe
     bools.append(inputSizeSafe)
 
     # Ensure output size isn't irregular
     output = outputArray[1]
     outputSizeIsSafe = compareOutputs(IoTDevice, output)
-    print outputSizeIsSafe
     bools.append(outputSizeIsSafe)
 
     # Ensure IoT device calls have been made before. I.e., device 1 doesn't call device 8
     deviceCalls = getDeviceCalls(callArray)
     deviceCallsAreSafe = compareDeviceCalls(IoTDevice, deviceCalls)
-    print deviceCallsAreSafe
     bools.append(deviceCallsAreSafe)
 
     # Ensure device parameters aren't irregular
     deviceParametersSafe = compareDeviceParameters(IoTDevice, deviceCalls, callArray)
-    print deviceParametersSafe
     bools.append(deviceParametersSafe)
 
     # Ensure not too much of a difference between input & parameter
     input_vs_parameter = max(getInputVsParameter(inputArray, getDeviceParameters(callArray)))
     isInputVsParameterSafe = compareInputsParameters(IoTDevice, input_vs_parameter)
-    print isInputVsParameterSafe
     bools.append(isInputVsParameterSafe)
 
     # Ensure not too much of a difference between parameter & output
     parameter_vs_output = max(getParameterVsOutput(getDeviceParameters(callArray), output))
     isParameterVsOutputSafe = compareParametersOutputs(IoTDevice, parameter_vs_output)
-    print isParameterVsOutputSafe
     bools.append(isParameterVsOutputSafe)
 
     # Ensure the inputs are within 2 standard deviations of data set
     inputStandardDeviationSafe = inputStandardDeviation(IoTDevice, inputArray)
-    print inputStandardDeviationSafe
     bools.append(inputStandardDeviationSafe)
 
     outputStandardDeviationSafe = outputStandardDeviation(IoTDevice, int(output))
-    print outputStandardDeviationSafe
     bools.append(outputStandardDeviationSafe)
 
     parameterStandardDeviationSafe = parameterStandardDeviation(IoTDevice, deviceCalls, callArray)
-    print parameterStandardDeviationSafe
     bools.append(parameterStandardDeviationSafe)
-
-    print ""
 
     # Check if any of the above checks returned False
     if bools.__contains__(False):
@@ -220,7 +207,6 @@ def getSpecifics(IoTDevice, inputArray, outputArray, callArray):
 
 def compareNumInputs(IoTDevice, numInputs):
 
-    print "Num_Inputs: " + str(numInputs)
     c.execute("SELECT * FROM IoT{} WHERE Num_Inputs={}".format(IoTDevice, numInputs))
     results = c.fetchall()
     lengthResults = len(results)
@@ -235,7 +221,6 @@ def compareNumInputs(IoTDevice, numInputs):
 
 def compareNumCalls(IoTDevice, numCalls):
 
-    print "Num_Calls: " + str(numCalls)
     c.execute("SELECT * FROM IoT{} WHERE Num_Calls={}".format(IoTDevice, numCalls))
     results = c.fetchall()
     lengthResults = len(results)
@@ -250,7 +235,6 @@ def compareNumCalls(IoTDevice, numCalls):
 
 def compareHighestInput(IoTDevice, highestInput):
 
-    print "Highest input: " + str(highestInput)
     c.execute("SELECT Highest_Input FROM IoT{} WHERE Highest_Input=(SELECT MAX(Highest_Input) FROM IoT{})".format(IoTDevice, IoTDevice))
     results = c.fetchall()
     tup = results[0]
@@ -266,7 +250,6 @@ def compareHighestInput(IoTDevice, highestInput):
 
 def compareOutputs(IoTDevice, output):
 
-    print "Compare output: " + output
     c.execute("SELECT Output FROM IoT{} WHERE Output=(SELECT MAX(Output) FROM IoT{})".format(IoTDevice, IoTDevice))
     results = c.fetchall()
     tup = results[0]
@@ -281,8 +264,6 @@ def compareOutputs(IoTDevice, output):
 # Query database to check if device calls have been made before
 
 def compareDeviceCalls(IoTDevice, deviceCalls):
-
-    print "compare device calls: " + str(deviceCalls)
 
     bools = []
 
@@ -304,8 +285,6 @@ def compareDeviceCalls(IoTDevice, deviceCalls):
 
 def compareDeviceParameters(IoTDevice, deviceCalls, callArray):
 
-    print "Compare device parameters: " + str(deviceCalls)
-
     bools = []
 
     for i in deviceCalls:
@@ -322,7 +301,7 @@ def compareDeviceParameters(IoTDevice, deviceCalls, callArray):
             else:
                 bools.append(False)
         else:
-            print 'List empty'
+            "print ''"
 
     if bools.__contains__(False):
         return False
@@ -334,7 +313,6 @@ def compareDeviceParameters(IoTDevice, deviceCalls, callArray):
 
 def compareInputsParameters(IoTDevice, inputsVsParameters):
 
-    print "Inputs vs parameters: "
     c.execute("SELECT Input_vs_Parameters FROM IoT{}_Calls WHERE Input_vs_Parameters=(SELECT MAX(Input_vs_Parameters) FROM IoT{}_Calls)".format(IoTDevice, IoTDevice))
     results = c.fetchall()
     tup = results[0]
@@ -350,7 +328,6 @@ def compareInputsParameters(IoTDevice, inputsVsParameters):
 
 def compareParametersOutputs(IoTDevice, parametersVsOutputs):
 
-    print "Parameters vs outputs"
     c.execute("SELECT Parameter_vs_Output FROM IoT{}_Calls WHERE Parameter_vs_Output=(SELECT MAX(Parameter_vs_Output) FROM IoT{}_Calls)".format(IoTDevice, IoTDevice))
     results = c.fetchall()
     tup = results[0]
@@ -360,25 +337,6 @@ def compareParametersOutputs(IoTDevice, parametersVsOutputs):
         return True
     else:
         return False
-
-
-# Method to get average input for standard deviation across all rows from inputs
-
-def getAverageInput(IoTDevice):
-
-    print "Taking average input from IoT Device: " + str(IoTDevice)
-
-    c.execute("SELECT Inputs FROM IoT{}".format(IoTDevice))
-    results = list(c.fetchall())
-    list1 = results[0]
-    print list1
-    list2 = list1[0]
-    print list2
-    list3 = list(list2[0])
-    print list3
-    for i in list3:
-        print i
-    intInputList = []
 
 
 # Method to calculate if the current inputs are outside of 2 standard deviations
@@ -421,7 +379,6 @@ def inputStandardDeviation(IoTDevice, inputs):
         else:
             diff = int(i) - int(mean)
         if diff > 1.8*standardDeviation:
-            print "Diff: " + str(diff) + " is more than 1.8x the standard deviation away!"
             isSafe.append(False)
 
     if isSafe.__contains__(False):
@@ -468,7 +425,6 @@ def outputStandardDeviation(IoTDevice, output):
     else:
         diff = output - int(mean)
     if diff > 1.8*standardDeviation:
-        print "Diff: " + str(diff) + " is more than 1.8x the standard deviation away!"
         isSafe.append(False)
 
     if isSafe.__contains__(False):
@@ -478,8 +434,6 @@ def outputStandardDeviation(IoTDevice, output):
 
 
 def parameterStandardDeviation(IoTDevice, deviceCalls, callArray):
-
-    print "Parameter Standard Deviation"
 
     isSafe = []
     valuesArray = []
@@ -503,7 +457,10 @@ def parameterStandardDeviation(IoTDevice, deviceCalls, callArray):
                         valuesArray.append(value)
 
                 # Calculate the mean
-                mean = sumValues/len(valuesArray)
+                if len(valuesArray) > 0:
+                    mean = sumValues/len(valuesArray)
+                else:
+                    break
                 iSubMeanSquaredArray = []
                 for b in results:
                     tup = b
@@ -527,7 +484,6 @@ def parameterStandardDeviation(IoTDevice, deviceCalls, callArray):
                 else:
                     diff = int(parameter) - int(mean)
                 if diff > 1.8*standardDeviation:
-                    print "Diff: " + str(diff) + " is more than 1.8x the standard deviation away!"
                     isSafe.append(False)
 
     if isSafe.__contains__(False):
@@ -547,8 +503,6 @@ def getIoTDeviceParameter(IoTDevice, callArray):
 
 def getOutput(IoT, output):
 
-    print output
-    print ""
     splitOutput = output.split()
     inputArray = getIoTInputs(splitOutput)
     callArray = getIoTDeviceArray(splitOutput)
@@ -572,13 +526,95 @@ conn = sqlite3.connect(database)
 c = conn.cursor()
 
 # Sys.argv[1] wouldn't work for me. the commented inputFile does though if argv doesn't
-# inputFile = sys.argv[1]
+inputFile = sys.argv[1]
 
+if inputFile.__contains__('T1'):
+    if inputFile.__contains__('anomaly'):
+        string = "Anomaly: "
+        getIoT(inputFile, 1)
+    else:
+        string = "Normal: "
+        getIoT(inputFile, 1)
+
+if inputFile.__contains__('2'):
+    if inputFile.__contains__('anomaly'):
+        string = "Anomaly: "
+        getIoT(inputFile, 2)
+    else:
+        string = "Normal: "
+        getIoT(inputFile, 2)
+
+if inputFile.__contains__('3'):
+    if inputFile.__contains__('anomaly'):
+        string = "Anomaly: "
+        getIoT(inputFile, 3)
+    else:
+        string = "Normal: "
+        getIoT(inputFile, 3)
+
+if inputFile.__contains__('4'):
+    if inputFile.__contains__('anomaly'):
+        string = "Anomaly: "
+        getIoT(inputFile, 4)
+    else:
+        string = "Normal: "
+        getIoT(inputFile, 4)
+
+if inputFile.__contains__('5'):
+    if inputFile.__contains__('anomaly'):
+        string = "Anomaly: "
+        getIoT(inputFile, 5)
+    else:
+        string = "Normal: "
+        getIoT(inputFile, 5)
+
+if inputFile.__contains__('6'):
+    if inputFile.__contains__('anomaly'):
+        string = "Anomaly: "
+        getIoT(inputFile, 6)
+    else:
+        string = "Normal: "
+        getIoT(inputFile, 6)
+
+if inputFile.__contains__('7'):
+    if inputFile.__contains__('anomaly'):
+        string = "Anomaly: "
+        getIoT(inputFile, 7)
+    else:
+        string = "Normal: "
+        getIoT(inputFile, 7)
+
+if inputFile.__contains__('8'):
+    if inputFile.__contains__('anomaly'):
+        string = "Anomaly: "
+        getIoT(inputFile, 8)
+    else:
+        string = "Normal: "
+        getIoT(inputFile, 8)
+
+if inputFile.__contains__('9'):
+    if inputFile.__contains__('anomaly'):
+        string = "Anomaly: "
+        getIoT(inputFile, 9)
+    else:
+        string = "Normal: "
+        getIoT(inputFile, 9)
+
+elif inputFile.__contains__('10'):
+    if inputFile.__contains__('anomaly'):
+        string = "Anomaly: "
+        getIoT(inputFile, 10)
+    else:
+        string = "Normal: "
+        getIoT(inputFile, 10)
+
+
+"""
 while 1:
 
-    inputFile = raw_input('Enter IoT file: ')
+    # inputFile = raw_input('Enter IoT file: ')
 
-    if inputFile.__contains__('1.'):
+    if inputFile.__contains__('T1'):
         if inputFile.__contains__('anomaly'):
             string = "Anomaly: "
             getIoT(inputFile, 1)
@@ -659,4 +695,5 @@ while 1:
             getIoT(inputFile, 10)
 
     print "  - " + string
+"""
 
