@@ -385,9 +385,6 @@ def getAverageInput(IoTDevice):
 
 def inputStandardDeviation(IoTDevice, inputs):
 
-    print ""
-    print "Input standard deviation: "
-
     maxValuesArray = []
     sumMaxValues = 0
 
@@ -402,7 +399,6 @@ def inputStandardDeviation(IoTDevice, inputs):
         maxValuesArray.append(value)
 
     mean = sumMaxValues/len(maxValuesArray)
-    print "Mean inputs: " + str(mean)
     iSubMeanSquaredArray = []
 
     for i in results:
@@ -417,28 +413,16 @@ def inputStandardDeviation(IoTDevice, inputs):
         iSubMeanSquaredTotal += i
 
     standardDeviation = math.sqrt(iSubMeanSquaredTotal / len(iSubMeanSquaredArray))
-    print "Standard deviation: " + str(standardDeviation)
 
     isSafe = []
     for i in inputs:
-        print "Input: " + str(i)
         if int(i) < mean:
             diff = int(mean) - int(i)
         else:
             diff = int(i) - int(mean)
-        print "Difference: " + str(diff)
         if diff > 1.8*standardDeviation:
             print "Diff: " + str(diff) + " is more than 1.8x the standard deviation away!"
             isSafe.append(False)
-        """
-        diffFromStandardDeviation = diff-standardDeviation
-        if diffFromStandardDeviation < 0:
-            diffFromStandardDeviation *= -1
-        print "Difference from standard deviation: " + str(diffFromStandardDeviation)
-        if diffFromStandardDeviation > 1.8*standardDeviation:
-            print "Diff: " + str(diff) + " is more than 1.8x the standard deviation away!"
-            isSafe.append(False)
-        """
 
     if isSafe.__contains__(False):
         return False
@@ -447,9 +431,6 @@ def inputStandardDeviation(IoTDevice, inputs):
 
 
 def outputStandardDeviation(IoTDevice, output):
-
-    print ""
-    print "Output standard deviation: "
 
     maxValuesArray = []
     sumMaxValues = 0
@@ -465,7 +446,6 @@ def outputStandardDeviation(IoTDevice, output):
         maxValuesArray.append(value)
 
     mean = sumMaxValues/len(maxValuesArray)
-    print "Mean outputs: " + str(mean)
     iSubMeanSquaredArray = []
 
     for i in results:
@@ -480,16 +460,13 @@ def outputStandardDeviation(IoTDevice, output):
         iSubMeanSquaredTotal += i
 
     standardDeviation = math.sqrt(iSubMeanSquaredTotal / len(iSubMeanSquaredArray))
-    print "Standard deviation: " + str(standardDeviation)
 
     isSafe = []
 
-    print "Output: " + str(output)
     if output < mean:
         diff = int(mean) - output
     else:
         diff = output - int(mean)
-    print "Difference: " + str(diff)
     if diff > 1.8*standardDeviation:
         print "Diff: " + str(diff) + " is more than 1.8x the standard deviation away!"
         isSafe.append(False)
@@ -503,10 +480,8 @@ def outputStandardDeviation(IoTDevice, output):
 def parameterStandardDeviation(IoTDevice, deviceCalls, callArray):
 
     print "Parameter Standard Deviation"
-    print "Iot Device: " + str(IoTDevice)
-    print "Device calls: " + str(deviceCalls)
-    print "call Array: " + str(callArray)
 
+    isSafe = []
     valuesArray = []
     sumValues = 0
 
@@ -514,7 +489,6 @@ def parameterStandardDeviation(IoTDevice, deviceCalls, callArray):
         for a in callArray:
             if a[2] == i:
                 # This is where standard deviation needs to happen
-                print "Device: " + str(a[2]) + " parameter: " + str(a[5])
                 # Select column from device
                 c.execute("SELECT IoT{} FROM IoT{}_Calls".format(a[2], IoTDevice))
                 results = c.fetchall()
@@ -522,19 +496,20 @@ def parameterStandardDeviation(IoTDevice, deviceCalls, callArray):
                 for b in results:
                     tup = b
                     value = tup[0]
-                    sumValues += value
-                    valuesArray.append(value)
+                    if value is None:
+                        "print 'None type'"
+                    else:
+                        sumValues += value
+                        valuesArray.append(value)
 
                 # Calculate the mean
                 mean = sumValues/len(valuesArray)
-                print "Mean outputs: " + str(mean)
-
                 iSubMeanSquaredArray = []
                 for b in results:
                     tup = b
                     value = tup[0]
                     if value is None:
-                        print 'None type'
+                        "print 'None type'"
                     else:
                         iSubtractMean = value - mean
                         iSubMeanSquared = iSubtractMean*iSubtractMean
@@ -545,10 +520,20 @@ def parameterStandardDeviation(IoTDevice, deviceCalls, callArray):
                     iSubMeanSquaredTotal += b
 
                 standardDeviation = math.sqrt(iSubMeanSquaredTotal / len(iSubMeanSquaredArray))
-                print "Standard deviation for device {}: ".format(a[2]) + str(standardDeviation)
-                print ""
+                parameter = a[5]
 
-    return True
+                if int(parameter) < mean:
+                    diff = int(mean) - int(parameter)
+                else:
+                    diff = int(parameter) - int(mean)
+                if diff > 1.8*standardDeviation:
+                    print "Diff: " + str(diff) + " is more than 1.8x the standard deviation away!"
+                    isSafe.append(False)
+
+    if isSafe.__contains__(False):
+        return False
+    else:
+        return True
 
 
 def getIoTDeviceParameter(IoTDevice, callArray):
@@ -593,7 +578,7 @@ while 1:
 
     inputFile = raw_input('Enter IoT file: ')
 
-    if inputFile.__contains__('1'):
+    if inputFile.__contains__('1.'):
         if inputFile.__contains__('anomaly'):
             string = "Anomaly: "
             getIoT(inputFile, 1)
@@ -665,7 +650,7 @@ while 1:
             string = "Normal: "
             getIoT(inputFile, 9)
 
-    if inputFile.__contains__('0'):
+    elif inputFile.__contains__('10'):
         if inputFile.__contains__('anomaly'):
             string = "Anomaly: "
             getIoT(inputFile, 10)
