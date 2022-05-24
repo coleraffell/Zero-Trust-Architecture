@@ -198,9 +198,15 @@ def getSpecifics(IoTDevice, inputArray, outputArray, callArray):
 
     # Check if any of the above checks returned False
     if bools.__contains__(False):
-        print "Anomaly!"
+        resultString = "     Anomaly!"
+        with open("output2.txt", "a") as myFile:
+            myFile.write(resultString+"\n")
+        print resultString
     else:
-        print "Safe!"
+        resultString = "     Safe!"
+        with open("output2.txt", "a") as myFile:
+            myFile.write(resultString+"\n")
+        print resultString
 
 
 # Query device database to check if device has received that many inputs before
@@ -526,174 +532,179 @@ conn = sqlite3.connect(database)
 c = conn.cursor()
 
 # Sys.argv[1] wouldn't work for me. the commented inputFile does though if argv doesn't
-inputFile = sys.argv[1]
+# inputFile = sys.argv[1]
 
-if inputFile.__contains__('T1'):
-    if inputFile.__contains__('anomaly'):
-        string = "Anomaly: "
-        getIoT(inputFile, 1)
-    else:
-        string = "Normal: "
-        getIoT(inputFile, 1)
-
-if inputFile.__contains__('2'):
-    if inputFile.__contains__('anomaly'):
-        string = "Anomaly: "
-        getIoT(inputFile, 2)
-    else:
-        string = "Normal: "
-        getIoT(inputFile, 2)
-
-if inputFile.__contains__('3'):
-    if inputFile.__contains__('anomaly'):
-        string = "Anomaly: "
-        getIoT(inputFile, 3)
-    else:
-        string = "Normal: "
-        getIoT(inputFile, 3)
-
-if inputFile.__contains__('4'):
-    if inputFile.__contains__('anomaly'):
-        string = "Anomaly: "
-        getIoT(inputFile, 4)
-    else:
-        string = "Normal: "
-        getIoT(inputFile, 4)
-
-if inputFile.__contains__('5'):
-    if inputFile.__contains__('anomaly'):
-        string = "Anomaly: "
-        getIoT(inputFile, 5)
-    else:
-        string = "Normal: "
-        getIoT(inputFile, 5)
-
-if inputFile.__contains__('6'):
-    if inputFile.__contains__('anomaly'):
-        string = "Anomaly: "
-        getIoT(inputFile, 6)
-    else:
-        string = "Normal: "
-        getIoT(inputFile, 6)
-
-if inputFile.__contains__('7'):
-    if inputFile.__contains__('anomaly'):
-        string = "Anomaly: "
-        getIoT(inputFile, 7)
-    else:
-        string = "Normal: "
-        getIoT(inputFile, 7)
-
-if inputFile.__contains__('8'):
-    if inputFile.__contains__('anomaly'):
-        string = "Anomaly: "
-        getIoT(inputFile, 8)
-    else:
-        string = "Normal: "
-        getIoT(inputFile, 8)
-
-if inputFile.__contains__('9'):
-    if inputFile.__contains__('anomaly'):
-        string = "Anomaly: "
-        getIoT(inputFile, 9)
-    else:
-        string = "Normal: "
-        getIoT(inputFile, 9)
-
-elif inputFile.__contains__('10'):
-    if inputFile.__contains__('anomaly'):
-        string = "Anomaly: "
-        getIoT(inputFile, 10)
-    else:
-        string = "Normal: "
-        getIoT(inputFile, 10)
+files = []
 
 
-"""
-while 1:
+for i in range(1, 11):
+    files.append("IoT1.exe")
+for i in range(1, 11):
+    files.append("IoT1_anomaly.exe")
+for i in range(1, 11):
+    files.append("IoT2.exe")
+for i in range(1, 11):
+    files.append("IoT2_anomaly.exe")
+for i in range(1, 11):
+    files.append("IoT3.exe")
+for i in range(1, 11):
+    files.append("IoT3_anomaly.exe")
+for i in range(1, 11):
+    files.append("IoT4.exe")
+for i in range(1, 11):
+    files.append("IoT4_anomaly.exe")
+for i in range(1, 11):
+    files.append("IoT5.exe")
+for i in range(1, 11):
+    files.append("IoT5_anomaly.exe")
+for i in range(1, 11):
+    files.append("IoT6.exe")
+for i in range(1, 11):
+    files.append("IoT6_anomaly.exe")
+for i in range(1, 11):
+    files.append("IoT7.exe")
+for i in range(1, 11):
+    files.append("IoT7_anomaly.exe")
+for i in range(1, 11):
+    files.append("IoT8.exe")
+for i in range(1, 11):
+    files.append("IoT8_anomaly.exe")
+for i in range(1, 11):
+    files.append("IoT9.exe")
+for i in range(1, 11):
+    files.append("IoT9_anomaly.exe")
+for i in range(1, 11):
+    files.append("IoT10.exe")
+for i in range(1, 11):
+    files.append("IoT10_anomaly.exe")
 
-    # inputFile = raw_input('Enter IoT file: ')
 
-    if inputFile.__contains__('T1'):
-        if inputFile.__contains__('anomaly'):
-            string = "Anomaly: "
-            getIoT(inputFile, 1)
-        else:
-            string = "Normal: "
-            getIoT(inputFile, 1)
+print str(files)
 
-    if inputFile.__contains__('2'):
-        if inputFile.__contains__('anomaly'):
-            string = "Anomaly: "
-            getIoT(inputFile, 2)
-        else:
-            string = "Normal: "
-            getIoT(inputFile, 2)
+with open("output2.txt", "a") as myFile:
 
-    if inputFile.__contains__('3'):
-        if inputFile.__contains__('anomaly'):
-            string = "Anomaly: "
-            getIoT(inputFile, 3)
-        else:
-            string = "Normal: "
-            getIoT(inputFile, 3)
+    for i in files:
+        myFile.write(i)
+        if i == 'IoT1.exe':
+            string = "IoT1: "
+            print string
+            getIoT(i, 1)
 
-    if inputFile.__contains__('4'):
-        if inputFile.__contains__('anomaly'):
-            string = "Anomaly: "
-            getIoT(inputFile, 4)
-        else:
-            string = "Normal: "
-            getIoT(inputFile, 4)
+        if i == 'IoT1_anomaly.exe':
+            string = "IoT1_anomaly:  "
+            myFile.write(string+"\n")
+            print string
+            getIoT(i, 1)
 
-    if inputFile.__contains__('5'):
-        if inputFile.__contains__('anomaly'):
-            string = "Anomaly: "
-            getIoT(inputFile, 5)
-        else:
-            string = "Normal: "
-            getIoT(inputFile, 5)
+        if i == 'IoT2.exe':
+            string = "IoT2: "
+            myFile.write(string+"\n")
+            print string
+            getIoT(i, 2)
 
-    if inputFile.__contains__('6'):
-        if inputFile.__contains__('anomaly'):
-            string = "Anomaly: "
-            getIoT(inputFile, 6)
-        else:
-            string = "Normal: "
-            getIoT(inputFile, 6)
+        if i == 'IoT2_anomaly.exe':
+            string = "IoT2_anomaly:  "
+            myFile.write(string+"\n")
+            print string
+            getIoT(i, 2)
 
-    if inputFile.__contains__('7'):
-        if inputFile.__contains__('anomaly'):
-            string = "Anomaly: "
-            getIoT(inputFile, 7)
-        else:
-            string = "Normal: "
-            getIoT(inputFile, 7)
+        if i == 'IoT3.exe':
+            string = "IoT3: "
+            myFile.write(string+"\n")
+            print string
+            getIoT(i, 3)
 
-    if inputFile.__contains__('8'):
-        if inputFile.__contains__('anomaly'):
-            string = "Anomaly: "
-            getIoT(inputFile, 8)
-        else:
-            string = "Normal: "
-            getIoT(inputFile, 8)
+        if i == 'IoT3_anomaly.exe':
+            string = "IoT3_anomaly:  "
+            myFile.write(string+"\n")
+            print string
+            getIoT(i, 3)
 
-    if inputFile.__contains__('9'):
-        if inputFile.__contains__('anomaly'):
-            string = "Anomaly: "
-            getIoT(inputFile, 9)
-        else:
-            string = "Normal: "
-            getIoT(inputFile, 9)
+        if i == 'IoT4.exe':
+            string = "IoT4: "
+            myFile.write(string+"\n")
+            print string
+            getIoT(i, 4)
 
-    elif inputFile.__contains__('10'):
-        if inputFile.__contains__('anomaly'):
-            string = "Anomaly: "
-            getIoT(inputFile, 10)
-        else:
-            string = "Normal: "
-            getIoT(inputFile, 10)
+        if i == 'IoT4_anomaly.exe':
+            string = "IoT4_anomaly:  "
+            myFile.write(string+"\n")
+            print string
+            getIoT(i, 4)
 
-    print "  - " + string
-"""
+        if i == 'IoT5.exe':
+            string = "IoT5: "
+            print string
+            getIoT(i, 5)
+
+        if i == 'IoT5_anomaly.exe':
+            string = "IoT5_anomaly:  "
+            myFile.write(string+"\n")
+            print string
+            getIoT(i, 5)
+
+        if i == 'IoT6.exe':
+            string = "IoT6: "
+            myFile.write(string+"\n")
+            print string
+            getIoT(i, 6)
+
+        if i == 'IoT6_anomaly.exe':
+            string = "IoT6_anomaly:  "
+            myFile.write(string+"\n")
+            print string
+            getIoT(i, 6)
+
+        if i == 'IoT7.exe':
+            string = "IoT7: "
+            myFile.write(string+"\n")
+            print string
+            getIoT(i, 7)
+
+        if i == 'IoT7_anomaly.exe':
+            string = "IoT7_anomaly:  "
+            myFile.write(string+"\n")
+            print string
+            getIoT(i, 7)
+
+        if i == 'IoT8.exe':
+            string = "IoT8: "
+            myFile.write(string+"\n")
+            print string
+            getIoT(i, 8)
+
+        if i == 'IoT8_anomaly.exe':
+            string = "IoT8_anomaly:  "
+            myFile.write(string+"\n")
+            print string
+            getIoT(i, 8)
+
+        if i == 'IoT9.exe':
+            string = "IoT9: "
+            myFile.write(string+"\n")
+            print string
+            getIoT(i, 9)
+
+        if i == 'IoT9_anomaly.exe':
+            string = "IoT9_anomaly:  "
+            myFile.write(string+"\n")
+            print string
+            getIoT(i, 9)
+
+        if i == 'IoT10.exe':
+            string = "IoT10: "
+            myFile.write(string+"\n")
+            print string
+            getIoT(i, 10)
+
+        if i == 'IoT10_anomaly.exe':
+            string = "IoT10_anomaly:  "
+            myFile.write(string+"\n")
+            print string
+            getIoT(i, 10)
+
+
+
+
+
 
